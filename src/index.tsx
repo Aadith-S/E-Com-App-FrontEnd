@@ -7,17 +7,24 @@ import { createBrowserRouter,RouterProvider } from 'react-router-dom';
 import { Sidebar } from './components/sidebar';
 import { Profile } from './components/profile';
 import { createTheme,ThemeProvider } from '@mui/material/styles';
+import { Products } from './components/products';
 const router = createBrowserRouter([
   {
     path : "/",
     element :<App/>,
     children : [
       {
-        path : "/home",
-        element : <Sidebar/>
+        path : "home",
+        element : <Sidebar/>,
+        children : [
+          {
+            path : "products",
+            element : <Products/>
+          }
+      ]
       },
       {
-        path : "/profile",
+        path : "profile",
         element : <Profile/>
       }
     ]
