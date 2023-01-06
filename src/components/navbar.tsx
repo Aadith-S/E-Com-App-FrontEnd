@@ -9,7 +9,7 @@ interface DropDown {
 }
 export const Navbar = ()=>{
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-    const dropDown : DropDown[] = [{ text : "profile",link : "/profile"},{text : "logout",link : "logout"}];
+    const dropDown : DropDown[] = [{ text : "Profile",link : "/profile"},{text : "Logout",link : "logout"}];
       const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
       };
@@ -27,9 +27,12 @@ export const Navbar = ()=>{
         <Toolbar>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Button variant="text" color="white" size="large" href="/home">E-COM</Button>
+            {/* <Button variant="text" color="white" size="large" href="/home">E-COM</Button> */}
+            <Link to="/home"  style={{
+                color : "white",
+                textDecoration: "none"
+            }}> <Typography variant="h4">E-COM</Typography> </Link>
           </Typography>
-
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open Drop Down">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -54,7 +57,11 @@ export const Navbar = ()=>{
             >
               {dropDown.map((dropDown) => (
                 <MenuItem key={dropDown.text} onClick={handleCloseUserMenu}>
-                    <Button href={dropDown.link}>{dropDown.text}</Button>
+                    {/* <Button href={dropDown.link}>{dropDown.text}</Button> */}
+                    <Link to={dropDown.text}  style={{
+                        color : "black",
+                        textDecoration: "none"
+                    }}> <Typography>{dropDown.text}</Typography> </Link>
                 </MenuItem>
               ))}
             </Menu>

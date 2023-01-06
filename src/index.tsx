@@ -18,7 +18,7 @@ const router = createBrowserRouter([
         element : <Sidebar/>,
         children : [
           {
-            path : "products",
+            path : "",
             element : <Products/>
           }
       ]
@@ -34,17 +34,23 @@ declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
     neutral: true;
     white : true;
+    yellow : true;
+    black : true;
   }
 }
 declare module '@mui/material/styles' {
   interface Palette {
     neutral: Palette['primary'];
     white: Palette['primary'];
+    yellow: Palette['primary'];
+    black: Palette['primary'];
   }
 
   interface PaletteOptions {
     neutral: PaletteOptions['primary'];
     white: PaletteOptions['primary'];
+    yellow: PaletteOptions['primary'];
+    black: PaletteOptions['primary'];
   }
 
   interface PaletteColor {
@@ -69,7 +75,15 @@ const theme = createTheme({
     white : {
       main: '#ffffff',
       contrastText: '#fff',
-    }
+    },
+    yellow : {
+      main : "#ffff00",
+      contrastText: '#fff',
+    },
+   black : {
+    main : "#000000",
+    contrastText: '#fff',
+   }
   },
 });
 const root = ReactDOM.createRoot(
