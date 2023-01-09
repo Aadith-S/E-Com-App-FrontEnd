@@ -1,11 +1,11 @@
-import { AppBar,Box,Button,Toolbar, Typography ,IconButton, Tooltip, Menu, MenuItem} from "@mui/material"
+import { AppBar,Box,Button,Toolbar, Typography ,IconButton, Tooltip, Menu, MenuItem, Modal} from "@mui/material"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import React from "react"
-import { Sidebar } from "./sidebar";
+import React,{useState} from "react"
 import { Link } from "react-router-dom";
+import { Login } from "./login";
 interface DropDown {
     text : string;
-    link : string;
+    link ?: string;
 }
 export const Navbar = ()=>{
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -17,7 +17,10 @@ export const Navbar = ()=>{
       const handleCloseUserMenu = () => {
         setAnchorElUser(null);
       };
-
+      const [open,setOpen] = useState(false);
+      const handleOpen = ()=>{
+        setOpen(true);
+      }
     return (
 
         <Box sx={{ flexGrow: 1 }}>
@@ -57,18 +60,21 @@ export const Navbar = ()=>{
             >
               {dropDown.map((dropDown) => (
                 <MenuItem key={dropDown.text} onClick={handleCloseUserMenu}>
-                    {/* <Button href={dropDown.link}>{dropDown.text}</Button> */}
+                    
                     <Link to={dropDown.text}  style={{
                         color : "black",
                         textDecoration: "none"
                     }}> <Typography>{dropDown.text}</Typography> </Link>
                 </MenuItem>
               ))}
+              <MenuItem>
+              <Button onClick={handleOpen}>Login</Button>
+              </MenuItem>
             </Menu>
           </Box>
-
         </Toolbar>
       </AppBar>
+    <Login open={open} setOpen={setOpen}/>
     </Box>
     )
 

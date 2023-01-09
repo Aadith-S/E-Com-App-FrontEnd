@@ -5,13 +5,13 @@ interface Product {
     price : number,
     product_image : string
 }
-const products : Product[] = [{product_name : "Some Name", price : 120,product_image : "asd"},{product_name : "Another Name", price : 220,product_image : ""}]
+const products : Product[] = [{product_name : "Some Name", price : 120,product_image :"https://images.unsplash.com/photo-1494548162494-384bba4ab999?ixlib=rb-1.2.1&w=1000&q=80"},{product_name : "Another Name", price : 220,product_image : "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"}]
 export const Products = () => {
     function getCard(product : Product,index : any): any {
         return (
             <Grid item xs={2.2}>
             <Card key={index} sx={{width : 200}}>
-                <CardMedia style={{height:180}} image="https://images.unsplash.com/photo-1494548162494-384bba4ab999?ixlib=rb-1.2.1&w=1000&q=80" />
+                <CardMedia style={{height:180}} image={product.product_image} />
                 <CardContent>
                     <Typography variant='h6'>
                         {product.product_name}
