@@ -7,12 +7,13 @@ import jwt_decode from 'jwt-decode';
 interface prop{
     open : boolean,
     setOpen : (value:boolean)=> void,
-
+    loggedIn : boolean,
+    setLoggedIn : (value:boolean)=>void
 }
 export const Login = (props:prop) => {
-    const [loggedIn,setLoggedIn] = useState(false);
     const handleClose = ()=>{
         props.setOpen(false);
+        props.setLoggedIn(true);
         }
     const loginHandler = (credentialResponse: any) => {
 
@@ -26,36 +27,19 @@ export const Login = (props:prop) => {
     
         if (credentialResponse.credential !== undefined) {
     
-            setLoggedIn(true);
+            props.setLoggedIn(true);
     
-            var decoded = jwt_decode(credentialResponse.credential);
+            var decoded : any = jwt_decode(credentialResponse.credential);
     
             localStorage.setItem('token',credentialResponse.credential);
 
             console.log(decoded);
-    
             props.setOpen(false);
     
         }
     
     
     
-        };
-    
-        const logoutHandler = () => {
-    
-    
-    
-        googleLogout();
-    
-    
-    
-        setLoggedIn(false);
-    
-    
-    
-        console.log("Logout Succesful");
-        props.setOpen(false);
         };
     const style = {
       position: 'absolute' as 'absolute',
@@ -68,7 +52,6 @@ export const Login = (props:prop) => {
       boxShadow: 24,
       p: 4,
     };
-    console.log(process.env.REACT_APP_GOOGLE_API_TOKEN);
   return (
     <Box>
         <Modal

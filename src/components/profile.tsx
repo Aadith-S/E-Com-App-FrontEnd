@@ -1,15 +1,20 @@
 import React from 'react'
 import {Typography,Card,CardContent,Stack, Box} from "@mui/material"
 import Paper from '@mui/material/Paper'
+import { getProfile } from '../services/profile'
+import { useQuery } from 'react-query'
 interface ProfileData{
   firstname : string,
   lastname : string,
   email : string,
-  phone : string,
-  address : string
 }
-const profileData : ProfileData = { firstname: 'John', lastname: 'Doe', email: 'john@doe.com',phone : "9812938192",address : "address" }
 export const Profile = () => {
+  const {data,isLoading} = useQuery("userData",getProfile);
+  if(isLoading){
+    return <p>Loading...</p>
+  }
+  console.log(data);
+  const profileData : ProfileData = data?.data;
   return (
     <Box sx={{
       marginLeft : 30,
@@ -28,12 +33,6 @@ export const Profile = () => {
         </Stack>
         <Stack direction="row" spacing={3}>
         <Typography variant='h6'>Email :</Typography><Typography sx={{padding:1}}>{profileData.email}</Typography>
-        </Stack>
-        <Stack direction="row" spacing={3}>
-        <Typography variant='h6'>Phone :</Typography><Typography sx={{padding:1}}>{profileData.phone}</Typography>
-        </Stack>
-        <Stack direction="row" spacing={3}>
-        <Typography variant='h6'>Address :</Typography><Typography sx={{padding:1}}>{profileData.address}</Typography>
         </Stack>
       </CardContent>
     </Card> 

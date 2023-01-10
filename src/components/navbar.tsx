@@ -1,15 +1,19 @@
-import { AppBar,Box,Button,Toolbar, Typography ,IconButton, Tooltip, Menu, MenuItem, Modal} from "@mui/material"
+import { AppBar,Box,Button,Toolbar, Typography ,IconButton, Tooltip, Menu, MenuItem, Modal, Avatar} from "@mui/material"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import React,{useState} from "react"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Login } from "./login";
+import { googleLogout } from "@react-oauth/google";
+import { useQuery } from "react-query";
+import { getProfile } from "../services/profile";
 interface DropDown {
     text : string;
     link ?: string;
 }
 export const Navbar = ()=>{
+    const navigate = useNavigate();
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-    const dropDown : DropDown[] = [{ text : "Profile",link : "/profile"},{text : "Logout",link : "logout"}];
+    const dropDown : DropDown[] = [{ text : "Profile",link : "/profile"},{text : "View Cart",link : "cart"},{text : "Wishlist",link : "/wishlist"}];
       const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
       };
@@ -21,6 +25,21 @@ export const Navbar = ()=>{
       const handleOpen = ()=>{
         setOpen(true);
       }
+      const [picture,setPicture] = useState<null | string>(null);
+      const [loggedIn,setLoggedIn] = useState(false);
+      const logoutHandler = () => {
+        googleLogout();
+        setLoggedIn(false);
+        console.log("Logout Succesful");
+        localStorage.clear();
+        setPicture(null)
+        setOpen(false);
+        navigate("/home");
+        };
+        const OnSuccess = ()  => {
+            setPicture(data?.data.profilePicture);
+        }
+      const {data} = useQuery("userData",getProfile,{onSuccess : OnSuccess,refetchInterval : 6000 });
     return (
 
         <Box sx={{ flexGrow: 1 }}>
@@ -39,7 +58,8 @@ export const Navbar = ()=>{
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open Drop Down">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <AccountCircleIcon fontSize="large"/>
+                {!picture && <AccountCircleIcon fontSize="large"/>}
+                {picture && <Avatar alt = "Profile Picture" src={picture}/>}
               </IconButton>
             </Tooltip>
             <Menu
@@ -68,13 +88,16 @@ export const Navbar = ()=>{
                 </MenuItem>
               ))}
               <MenuItem>
-              <Button onClick={handleOpen}>Login</Button>
+              {!loggedIn && <Button onClick={handleOpen}>Login</Button>}
+              </MenuItem>
+              <MenuItem>
+              {loggedIn && <Button onClick={logoutHandler}>Logout</Button>}
               </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
       </AppBar>
-    <Login open={open} setOpen={setOpen}/>
+    <Login open={open} setOpen={setOpen} loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
     </Box>
     )
 
