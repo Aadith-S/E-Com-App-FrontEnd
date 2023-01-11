@@ -9,6 +9,7 @@ import { Profile } from './components/profile';
 import { createTheme,ThemeProvider } from '@mui/material/styles';
 import { Products } from './components/products';
 import { QueryClient, QueryClientProvider} from 'react-query'
+import { AddProduct } from './components/addProduct';
 
 const queryClient = new QueryClient()
 
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path : "profile",
         element : <Profile/>
+      },
+      {
+        path : "addProduct",
+        element : <AddProduct/>
       }
     ]
   }

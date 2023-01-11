@@ -1,19 +1,17 @@
 import { AppBar,Box,Button,Toolbar, Typography ,IconButton, Tooltip, Menu, MenuItem, Modal, Avatar} from "@mui/material"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import React,{useState} from "react"
+import React,{useState,useEffect, useReducer,useRef} from "react"
 import { Link, useNavigate } from "react-router-dom";
 import { Login } from "./login";
 import { googleLogout } from "@react-oauth/google";
-import { useQuery } from "react-query";
-import { getProfile } from "../services/profile";
 interface DropDown {
     text : string;
-    link ?: string;
+    link : string;
 }
 export const Navbar = ()=>{
     const navigate = useNavigate();
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-    const dropDown : DropDown[] = [{ text : "Profile",link : "/profile"},{text : "View Cart",link : "cart"},{text : "Wishlist",link : "/wishlist"}];
+    var dropDown : DropDown[];
       const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
       };
@@ -26,20 +24,57 @@ export const Navbar = ()=>{
         setOpen(true);
       }
       const [picture,setPicture] = useState<null | string>(null);
-      const [loggedIn,setLoggedIn] = useState(false);
+    //   const [loggedIn,setLoggedIn] = useReducer((state) => {return !state;}, false);
+        const loggedIn = useRef(false);
+      if(loggedIn.current){
+        dropDown = [{ text : "Profile",link : "/profile"},{text : "View Cart",link : "cart"},{text : "Wishlist",link : "/wishlist"},{text : "Add Product",link : "/addProduct"}];
+      }
+      else {
+        dropDown = []
+      }
       const logoutHandler = () => {
         googleLogout();
-        setLoggedIn(false);
-        console.log("Logout Succesful");
+        loggedIn.current = false;
         localStorage.clear();
         setPicture(null)
         setOpen(false);
         navigate("/home");
         };
-        const OnSuccess = ()  => {
-            setPicture(data?.data.profilePicture);
+        const logincheck = () =>{
+            console.log("in check");
+            if(localStorage.getItem("picture") != null){
+                setPicture(localStorage.getItem("picture"));
+                console.log("in setLogged");
+                loggedIn.current = true;
+            }
         }
-      const {data} = useQuery("userData",getProfile,{onSuccess : OnSuccess,refetchInterval : 6000 });
+        useEffect(logincheck,[,picture]);
+        const getProPic : any = () =>{
+            if(picture === null){
+                return <AccountCircleIcon fontSize="large"/>
+            }
+            else{
+                console.log(picture);
+               return <Avatar src={picture}/>
+            }
+        }
+        console.log(loggedIn);
+        const getLogged = () : any =>{
+            if(loggedIn.current){
+            return (
+                <MenuItem>
+                <Button onClick={logoutHandler}>Logout</Button>
+                </MenuItem>
+                )
+            }
+            else{
+                return (
+                    <MenuItem>
+                    <Button onClick={handleOpen}>Login</Button>
+                    </MenuItem>
+                )
+            }
+        }
     return (
 
         <Box sx={{ flexGrow: 1 }}>
@@ -58,8 +93,7 @@ export const Navbar = ()=>{
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open Drop Down">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {!picture && <AccountCircleIcon fontSize="large"/>}
-                {picture && <Avatar alt = "Profile Picture" src={picture}/>}
+                {getProPic()}
               </IconButton>
             </Tooltip>
             <Menu
@@ -81,23 +115,18 @@ export const Navbar = ()=>{
               {dropDown.map((dropDown) => (
                 <MenuItem key={dropDown.text} onClick={handleCloseUserMenu}>
                     
-                    <Link to={dropDown.text}  style={{
+                    <Link to={dropDown.link}  style={{
                         color : "black",
                         textDecoration: "none"
                     }}> <Typography>{dropDown.text}</Typography> </Link>
                 </MenuItem>
               ))}
-              <MenuItem>
-              {!loggedIn && <Button onClick={handleOpen}>Login</Button>}
-              </MenuItem>
-              <MenuItem>
-              {loggedIn && <Button onClick={logoutHandler}>Logout</Button>}
-              </MenuItem>
+              {getLogged()}
             </Menu>
           </Box>
         </Toolbar>
       </AppBar>
-    <Login open={open} setOpen={setOpen} loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
+    <Login open={open} setOpen={setOpen} ref={loggedIn}/>
     </Box>
     )
 
