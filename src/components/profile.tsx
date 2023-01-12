@@ -1,6 +1,6 @@
-import React from 'react'
+// import React from 'react'
 import {Typography,Card,CardContent,Stack, Box} from "@mui/material"
-import Paper from '@mui/material/Paper'
+// import Paper from '@mui/material/Paper'
 import { getProfile } from '../services/profile'
 import { useQuery } from 'react-query'
 interface ProfileData{
@@ -9,7 +9,7 @@ interface ProfileData{
   email : string,
 }
 export const Profile = () => {
-  const {data,isLoading} = useQuery("userData",getProfile);
+  const {data,isLoading} = useQuery(["userData"],getProfile);
   if(isLoading){
     return <p>Loading...</p>
   }

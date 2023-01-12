@@ -4,8 +4,16 @@ interface data {
     productPrice : number,
     productImage : string,
 }
-const getProduct = async()=>{
-    return await axios.get("/products");
+interface param{
+    sort ?: string,
+    min ?: number,
+    max ?: number
+}
+const getProduct = async(param : param ={})=>{
+    console.log(param);
+    console.log(typeof param.min);
+    
+    return await axios.get("/products",{params : param});
 }
 const addProduct = async(data : data)=>{
     return await axios.post("/addProduct",data);

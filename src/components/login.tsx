@@ -1,13 +1,14 @@
-import {Button, Modal, Typography } from '@mui/material'
+import {Modal} from '@mui/material'
 import { Box } from '@mui/system'
-import React,{useState} from 'react'
-import { googleLogout, GoogleOAuthProvider } from '@react-oauth/google';
+// import React,{useState} from 'react'
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
 import jwt_decode from 'jwt-decode';
 interface prop{
     open : boolean,
     setOpen : (value:boolean)=> void,
-    ref : React.ForwardedRef<boolean>
+    setLoggedIn : (value:boolean)=> void,
+    setPicture : (value:string)=> void
 }
 export const Login = (props:prop) => {
     const handleClose = ()=>{
@@ -16,12 +17,11 @@ export const Login = (props:prop) => {
     const loginHandler = (credentialResponse: any) => {
         console.log(credentialResponse.credential);
         if (credentialResponse.credential !== undefined) {
-            console.log(props.ref);
-            
             var decoded : any = jwt_decode(credentialResponse.credential);
-    
+            props.setLoggedIn(true);
             localStorage.setItem('token',credentialResponse.credential);
             localStorage.setItem("picture",decoded.picture);
+            props.setPicture(decoded.picture);
             console.log(decoded);
             props.setOpen(false);
         }
@@ -50,7 +50,6 @@ export const Login = (props:prop) => {
              <GoogleLogin
               onSuccess={loginHandler}
               onError={()=>console.log("Error Occured")}
-            useOneTap
             />
             </GoogleOAuthProvider>
         </Box>

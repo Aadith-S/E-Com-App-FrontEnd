@@ -1,6 +1,6 @@
-import { AppBar,Box,Button,Toolbar, Typography ,IconButton, Tooltip, Menu, MenuItem, Modal, Avatar} from "@mui/material"
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import React,{useState,useEffect, useReducer,useRef} from "react"
+import { AppBar,Box,Button,Toolbar, Typography ,IconButton, Tooltip, Menu, MenuItem, Avatar} from "@mui/material"
+// import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import React,{useState,useEffect} from "react"
 import { Link, useNavigate } from "react-router-dom";
 import { Login } from "./login";
 import { googleLogout } from "@react-oauth/google";
@@ -24,9 +24,9 @@ export const Navbar = ()=>{
         setOpen(true);
       }
       const [picture,setPicture] = useState<null | string>(null);
-    //   const [loggedIn,setLoggedIn] = useReducer((state) => {return !state;}, false);
-        const loggedIn = useRef(false);
-      if(loggedIn.current){
+      const [loggedIn,setLoggedIn] = useState<boolean>(false);
+        // const loggedIn = useRef(false);
+      if(loggedIn){
         dropDown = [{ text : "Profile",link : "/profile"},{text : "View Cart",link : "cart"},{text : "Wishlist",link : "/wishlist"},{text : "Add Product",link : "/addProduct"}];
       }
       else {
@@ -34,7 +34,7 @@ export const Navbar = ()=>{
       }
       const logoutHandler = () => {
         googleLogout();
-        loggedIn.current = false;
+        setLoggedIn(false);
         localStorage.clear();
         setPicture(null)
         setOpen(false);
@@ -45,36 +45,44 @@ export const Navbar = ()=>{
             if(localStorage.getItem("picture") != null){
                 setPicture(localStorage.getItem("picture"));
                 console.log("in setLogged");
-                loggedIn.current = true;
+                setLoggedIn(true);
             }
         }
-        useEffect(logincheck,[,picture]);
-        const getProPic : any = () =>{
-            if(picture === null){
-                return <AccountCircleIcon fontSize="large"/>
-            }
-            else{
-                console.log(picture);
-               return <Avatar src={picture}/>
-            }
-        }
+        useEffect(logincheck,[picture]);
+        // const getProPic : any = () =>{
+        //     if(picture === null){
+        //         return <AccountCircleIcon fontSize="large"/>
+        //     }
+        //     else{
+        //         console.log(picture);
+        //        return <Avatar src={picture}/>
+        //     }
+        // }
         console.log(loggedIn);
         const getLogged = () : any =>{
-            if(loggedIn.current){
+            if(loggedIn){
             return (
                 <MenuItem>
-                <Button onClick={logoutHandler}>Logout</Button>
+                <Button style={{
+                        color : "black",
+                        textDecoration: "none"
+                    }} onClick={logoutHandler}>Logout</Button>
                 </MenuItem>
                 )
             }
             else{
                 return (
                     <MenuItem>
-                    <Button onClick={handleOpen}>Login</Button>
+                    <Button style={{
+                        color : "black",
+                        textDecoration: "none"
+                    }} onClick={handleOpen}>Login</Button>
                     </MenuItem>
                 )
             }
         }
+        console.log(picture);
+        
     return (
 
         <Box sx={{ flexGrow: 1 }}>
@@ -93,7 +101,8 @@ export const Navbar = ()=>{
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open Drop Down">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {getProPic()}
+                {/* {getProPic()} */}
+                <Avatar src={picture !== null ? picture : undefined}/>
               </IconButton>
             </Tooltip>
             <Menu
@@ -115,10 +124,10 @@ export const Navbar = ()=>{
               {dropDown.map((dropDown) => (
                 <MenuItem key={dropDown.text} onClick={handleCloseUserMenu}>
                     
-                    <Link to={dropDown.link}  style={{
+                    <Button href={dropDown.link}  style={{
                         color : "black",
                         textDecoration: "none"
-                    }}> <Typography>{dropDown.text}</Typography> </Link>
+                    }}> <Typography>{dropDown.text}</Typography> </Button>
                 </MenuItem>
               ))}
               {getLogged()}
@@ -126,7 +135,7 @@ export const Navbar = ()=>{
           </Box>
         </Toolbar>
       </AppBar>
-    <Login open={open} setOpen={setOpen} ref={loggedIn}/>
+    <Login open={open} setOpen={setOpen} setLoggedIn={setLoggedIn} setPicture={setPicture}/>
     </Box>
     )
 
