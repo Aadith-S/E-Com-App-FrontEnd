@@ -10,8 +10,32 @@ export const AddProduct = () => {
     const [productPrice,setProductPrice] = useState<string>("")
     const [productImage,setProductImage] = useState<string>("")
     const {mutate,isSuccess} = useMutation(addProduct);
+    const [error,setError] = useState<string>("")
+    const checkError = ()=>{
+      if(productName.length === 0){
+        setError("Product Name is empty");
+        return false;
+      }
+      else if(isNaN(+productPrice)){
+        setError("Price must be a number");
+        return false;
+      }
+      else if(!productPrice){
+        setError("Price Field is empty");
+        return false;
+      }
+      else if(productImage.length === 0){
+        setError("Product Image is empty");
+        return false;
+      }
+      else{
+        setError("");
+        return true;
+      }
+    }
     const productHandler = () => {
-        mutate({
+        if(checkError()){
+          mutate({
             productName: productName,
             productPrice: parseInt(productPrice),
             productImage: productImage
@@ -19,8 +43,8 @@ export const AddProduct = () => {
         setProductName("");
         setProductPrice("");
         setProductImage("");
+        }
     }
-    console.log(productName,productPrice,productImage);
   return (
     <Box sx={{
         marginLeft : 50,
@@ -46,6 +70,7 @@ export const AddProduct = () => {
         </CardContent>
       </Card> 
       {isSuccess && <Alert severity='success'>Product Added</Alert>}    
+      {error && <Alert severity='error'>{error}</Alert>}
       </Box>
   )
 }
