@@ -25,9 +25,8 @@ export const Navbar = ()=>{
       }
       const [picture,setPicture] = useState<null | string>(null);
       const [loggedIn,setLoggedIn] = useState<boolean>(false);
-        // const loggedIn = useRef(false);
       if(loggedIn){
-        dropDown = [{ text : "Profile",link : "/profile"},{text : "View Cart",link : "cart"},{text : "Wishlist",link : "/wishlist"},{text : "Add Product",link : "/addProduct"}];
+        dropDown = [{ text : "Profile",link : "/profile"},{text : "Add Product",link : "/addProduct"}];
       }
       else {
         dropDown = []
