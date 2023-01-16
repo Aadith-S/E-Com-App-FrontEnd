@@ -4,15 +4,13 @@ import { Alert, Box, Button, Card, CardContent, Stack, TextField } from '@mui/ma
 import { useState } from 'react'
 import {useMutation} from "react-query"
 import { addProduct } from '../services/products'
-
+import isURL from "validator/lib/isURL"
 export const AddProduct = () => {
     const [productName,setProductName] = useState<string>("")
     const [productPrice,setProductPrice] = useState<string>("")
     const [productImage,setProductImage] = useState<string>("")
     const {mutate,isSuccess} = useMutation(addProduct);
     const [error,setError] = useState<string>("")
-    const regexQuery = "/(http(s)?://.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/";
-    var url = new RegExp(regexQuery,"g");
     const checkError = ()=>{
       if(productName.length === 0){
         setError("Product Name is empty");
@@ -30,7 +28,7 @@ export const AddProduct = () => {
         setError("Product Image is empty");
         return false;
       }
-      else if(!url.test(productImage)){
+      else if(!isURL(productImage)){
         setError("Product image link is Invalid")
         return false;
       }
