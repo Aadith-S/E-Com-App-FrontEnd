@@ -1,6 +1,4 @@
-// import React from 'react'
 import {Typography,Card,CardContent,Stack, Box} from "@mui/material"
-// import Paper from '@mui/material/Paper'
 import { getProfile } from '../services/profile'
 import { useQuery } from 'react-query'
 interface ProfileData{

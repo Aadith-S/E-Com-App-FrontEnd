@@ -15,14 +15,12 @@ export const Login = (props:prop) => {
         props.setOpen(false);
         }
     const loginHandler = (credentialResponse: any) => {
-        console.log(credentialResponse.credential);
         if (credentialResponse.credential !== undefined) {
             var decoded : any = jwt_decode(credentialResponse.credential);
             props.setLoggedIn(true);
             localStorage.setItem('token',credentialResponse.credential);
             localStorage.setItem("picture",decoded.picture);
             props.setPicture(decoded.picture);
-            console.log(decoded);
             props.setOpen(false);
         }
         };

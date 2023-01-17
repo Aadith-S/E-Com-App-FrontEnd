@@ -1,5 +1,4 @@
 import { AppBar,Box,Button,Toolbar, Typography ,IconButton, Tooltip, Menu, MenuItem, Avatar} from "@mui/material"
-// import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import React,{useState,useEffect} from "react"
 import { Link, useNavigate } from "react-router-dom";
 import { Login } from "./login";
@@ -40,24 +39,12 @@ export const Navbar = ()=>{
         navigate("/home");
         };
         const logincheck = () =>{
-            console.log("in check");
             if(localStorage.getItem("picture") != null){
                 setPicture(localStorage.getItem("picture"));
-                console.log("in setLogged");
                 setLoggedIn(true);
             }
         }
         useEffect(logincheck,[picture]);
-        // const getProPic : any = () =>{
-        //     if(picture === null){
-        //         return <AccountCircleIcon fontSize="large"/>
-        //     }
-        //     else{
-        //         console.log(picture);
-        //        return <Avatar src={picture}/>
-        //     }
-        // }
-        console.log(loggedIn);
         const getLogged = () : any =>{
             if(loggedIn){
             return (
@@ -79,9 +66,7 @@ export const Navbar = ()=>{
                     </MenuItem>
                 )
             }
-        }
-        console.log(picture);
-        
+        }    
     return (
 
         <Box sx={{ flexGrow: 1 }}>
@@ -91,7 +76,6 @@ export const Navbar = ()=>{
         <Toolbar>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {/* <Button variant="text" color="white" size="large" href="/home">E-COM</Button> */}
             <Link to="/home"  style={{
                 color : "white",
                 textDecoration: "none"
@@ -100,7 +84,6 @@ export const Navbar = ()=>{
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open Drop Down">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {/* {getProPic()} */}
                 <Avatar src={picture !== null ? picture : undefined}/>
               </IconButton>
             </Tooltip>
