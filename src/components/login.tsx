@@ -1,6 +1,5 @@
 import {Modal} from '@mui/material'
 import { Box } from '@mui/system'
-// import React,{useState} from 'react'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
 import jwt_decode from 'jwt-decode';
@@ -15,12 +14,13 @@ export const Login = (props:prop) => {
         props.setOpen(false);
         }
     const loginHandler = (credentialResponse: any) => {
-        if (credentialResponse.credential !== undefined) {
-            var decoded : any = jwt_decode(credentialResponse.credential);
+      const {credential} = credentialResponse;
+        if (credential !== undefined) {
+            var {picture} : any = jwt_decode(credential);
             props.setLoggedIn(true);
-            localStorage.setItem('token',credentialResponse.credential);
-            localStorage.setItem("picture",decoded.picture);
-            props.setPicture(decoded.picture);
+            localStorage.setItem('token',credential);
+            localStorage.setItem("picture",picture);
+            props.setPicture(picture);
             props.setOpen(false);
         }
         };

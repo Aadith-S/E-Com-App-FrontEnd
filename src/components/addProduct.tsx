@@ -40,9 +40,9 @@ export const AddProduct = () => {
     const productHandler = () => {
         if(checkError()){
           mutate({
-            productName: productName,
+            productName,
             productPrice: parseInt(productPrice),
-            productImage: productImage
+            productImage
         });
         setProductName("");
         setProductPrice("");

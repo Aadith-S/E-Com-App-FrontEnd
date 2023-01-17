@@ -33,16 +33,17 @@ export const Products = () => {
     useEffect(()=>{params.current = param},[param]);
     useEffect(()=>{min.current = filter.min;max.current = filter.max;refetch()},[filter])
     function getCard(product : Product,index : any): any {
+        const {product_image,product_name,price} = product;
         return (
             <Grid item xs={4}>
             <Card key={index} sx={{width : 200}}>
-                <CardMedia style={{height:180}} image={product.product_image} />
+                <CardMedia style={{height:180}} image={product_image} />
                 <CardContent>
                     <Typography variant='h6'>
-                        {product.product_name}
+                        {product_name}
                     </Typography>
                     <Typography variant='body1'>
-                        {product.price}
+                        {price}
                     </Typography>
                     <Button variant='contained'size='small'>Add to cart</Button>
                 </CardContent>
